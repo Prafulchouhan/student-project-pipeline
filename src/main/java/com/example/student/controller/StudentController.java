@@ -2,9 +2,7 @@ package com.example.student.controller;
 
 
 import com.example.student.exception.ResourceNotFoundException;
-import com.example.student.reprository.SubjectReprository;
 import com.example.student.model.Student;
-import com.example.student.reprository.StudentReprository;
 import com.example.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,15 +15,10 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentService;
-    private final StudentReprository studentReprository;
-
-    private final SubjectReprository subjectReprository;
 
     @Autowired
-    public StudentController(StudentService studentService, StudentReprository studentReprository ,SubjectReprository subjectReprository) {
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
-        this.studentReprository = studentReprository;
-        this.subjectReprository = subjectReprository;
     }
 
     @GetMapping
@@ -42,8 +35,8 @@ public class StudentController {
 
 
     @PostMapping()
-    public void registerNewStudent(@RequestBody Student student){
-        studentService.addNewStudent(student);
+    public Student registerNewStudent(@RequestBody Student student){
+        return studentService.saveStudent(student);
     }
 
     //manytomany
@@ -51,7 +44,7 @@ public class StudentController {
     public Student addSubToStudent(
             @PathVariable Long studentId,
             @PathVariable Long subjectId
-    ){
+    ) throws ResourceNotFoundException {
         return studentService.addSubjectToStudentService(studentId,subjectId);
     }
 

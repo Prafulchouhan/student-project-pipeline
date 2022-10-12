@@ -5,8 +5,6 @@ import com.example.student.exception.ResourceNotFoundException;
 import com.example.student.model.Subject;
 import com.example.student.reprository.StudentReprository;
 import com.example.student.model.Student;
-import com.example.student.reprository.SubjectReprository;
-import com.example.student.reprository.TeacherReprository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,16 +13,12 @@ import java.util.List;
 @Service
 public class StudentService {
     private final StudentReprository studentReprository;
-
-    private final SubjectReprository subjectReprository;
-
-    private final TeacherReprository teacherReprository;
+    private final SubjectService subjectService;
 
     @Autowired
-    public StudentService(StudentReprository studentReprository, SubjectReprository subjectReprository, TeacherReprository teacherReprository) {
+    public StudentService(StudentReprository studentReprository, SubjectService subjectService) {
         this.studentReprository = studentReprository;
-        this.subjectReprository = subjectReprository;
-        this.teacherReprository = teacherReprository;
+        this.subjectService = subjectService;
     }
 
     public List<Student> getStudents(){
@@ -32,25 +26,32 @@ public class StudentService {
     }
 
 
-    public void addNewStudent(Student student) {
-        studentReprository.save(student);
-    }
-    public Student addSubjectToStudentService(Long studentId,Long subjectId){
-        Subject subject=subjectReprository.findById(subjectId).get();
-        Student student=studentReprository.findById(studentId).get();
-        student.addSub(subject);
+    public Student saveStudent(Student student){
         return studentReprository.save(student);
+    }
+
+    public void deleteStudent(Student student){
+        studentReprository.delete(student);
     }
 
     public Student getStudentById(Long id)throws ResourceNotFoundException {
         return studentReprository.findById(id)
                 .orElseThrow(()->
-                new ResourceNotFoundException("Student not found for this id :: " + id));
+                        new ResourceNotFoundException("Student not found for this id :: " + id));
     }
+
+    public Student addSubjectToStudentService(Long studentId,Long subjectId) throws ResourceNotFoundException {
+        Subject subject= subjectService.getSubjectById(subjectId);
+        Student student=getStudentById(studentId);
+        student.addSub(subject);
+        return saveStudent(student);
+    }
+
+
     public List<Student> deleteStudentService(Long id) throws ResourceNotFoundException {
         Student student=getStudentById(id);
-        studentReprository.delete(student);
-        return studentReprository.findAll();
+        deleteStudent(student);
+        return getStudents();
     }
 
     public Student updateStudentService(Long id, Student std) throws ResourceNotFoundException {
@@ -58,6 +59,6 @@ public class StudentService {
         student.setName(std.getName());
         student.setDob(std.getDob());
         student.setEmail(std.getEmail());
-        return studentReprository.save(student);
+        return saveStudent(student);
     }
 }

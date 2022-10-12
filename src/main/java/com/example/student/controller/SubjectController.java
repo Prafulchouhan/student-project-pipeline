@@ -1,6 +1,6 @@
 package com.example.student.controller;
 
-import com.example.student.model.Student;
+import com.example.student.exception.ResourceNotFoundException;
 import com.example.student.model.Subject;
 import com.example.student.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class SubjectController {
     public Subject assignTeacherToSubject(
             @PathVariable Long subjectId,
             @PathVariable Long teacherId
-    ){
+    ) throws ResourceNotFoundException {
         return subjectService.assignTeacherToSubjectService(subjectId,teacherId);
     }
 
@@ -41,7 +41,7 @@ public class SubjectController {
     @DeleteMapping("/{id}")
     public List<Subject> deleteSubject(
             @PathVariable Long id
-    ){
+    ) throws ResourceNotFoundException {
         return subjectService.deleteSubjectService(id);
     }
 

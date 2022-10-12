@@ -1,6 +1,7 @@
 package com.example.student.controller;
 
 
+import com.example.student.exception.ResourceNotFoundException;
 import com.example.student.model.Teacher;
 import com.example.student.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class TeacherController {
     @DeleteMapping("/{id}")
     public List<Teacher> deleteTeacher(
             @PathVariable Long id
-    ){
+    ) throws ResourceNotFoundException {
         return teacherService.deleteTeacherService(id);
     }
 

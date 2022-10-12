@@ -1,9 +1,7 @@
 package com.example.student.service;
 
-import com.example.student.model.Student;
+import com.example.student.exception.ResourceNotFoundException;
 import com.example.student.model.Teacher;
-import com.example.student.reprository.StudentReprository;
-import com.example.student.reprository.SubjectReprository;
 import com.example.student.reprository.TeacherReprository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,16 +10,11 @@ import java.util.List;
 
 @Service
 public class TeacherService {
-    private final SubjectReprository subjectReprository;
-
-    private final StudentReprository studentReprository;
 
     private final TeacherReprository teacherReprository;
 
     @Autowired
-    public TeacherService(SubjectReprository subjectReprository, StudentReprository studentReprository, TeacherReprository teacherReprository) {
-        this.subjectReprository = subjectReprository;
-        this.studentReprository = studentReprository;
+    public TeacherService(TeacherReprository teacherReprository) {
         this.teacherReprository = teacherReprository;
     }
 
@@ -29,12 +22,23 @@ public class TeacherService {
         return this.teacherReprository.findAll();
     }
 
+    public Teacher getTeacherById(Long id)throws ResourceNotFoundException {
+        return teacherReprository.findById(id)
+                .orElseThrow(()->
+                        new ResourceNotFoundException("Student not found for this id :: " + id));
+    }
+
+    public void deleteTeacher(Teacher teacher){
+        teacherReprository.delete(teacher);
+    }
+
     public Teacher createTeacherService(Teacher teacher) {
         return this.teacherReprository.save(teacher);
     }
-    public List<Teacher> deleteTeacherService(Long id) {
-        Teacher teacher=teacherReprository.findById(id).get();
-        teacherReprository.delete(teacher);
-        return teacherReprository.findAll();
+
+    public List<Teacher> deleteTeacherService(Long id) throws ResourceNotFoundException {
+        Teacher teacher=getTeacherById(id);
+        deleteTeacher(teacher);
+        return getTeachersService();
     }
 }

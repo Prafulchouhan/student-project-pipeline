@@ -83,7 +83,7 @@ public class studentServiceTest {
         assertThat(studentService.updateStudentService(anyLong(),s1)).isNotNull();
     }
     @Test
-    public void deleteBook() throws ResourceNotFoundException {
+    public void deleteStudent() throws ResourceNotFoundException {
         studentService.deleteStudentService(anyLong());
         verify(studentReprository,times(1)).deleteById(anyLong());
     }
@@ -105,7 +105,7 @@ public class studentServiceTest {
 //    }
 
     @Test
-    public void getDepartmentByIdNotFoundException(){
+    public void getStudentByIdNotFoundException(){
         assertThatExceptionOfType(ResourceNotFoundException.class)
                 .isThrownBy(() -> studentService.getStudentById(1L))
                 .withMessage("Student not found for this id :: 1");

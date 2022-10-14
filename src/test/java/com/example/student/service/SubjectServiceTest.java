@@ -54,7 +54,7 @@ public class SubjectServiceTest {
     }
 
     @Test
-    public void getAllStudent(){
+    public void getAllSubject(){
         when(subjectReprository.findAll()).thenReturn(Arrays.asList(s1,s2,s3));
         System.out.println(subjectService.getSubjectService());
         assertThat(subjectService.getSubjectService().size()).isNotNull();
@@ -62,21 +62,21 @@ public class SubjectServiceTest {
 
 
     @Test
-    public void getAllSubject() throws ResourceNotFoundException {
+    public void getSubjectByid() throws ResourceNotFoundException {
         long id = 1L;
         when(subjectReprository.findById(s1.getId())).thenReturn(Optional.ofNullable(s1));
         assertThat(subjectService.getSubjectById(s1.getId()).getName()).isEqualTo("Maths");
     }
 
     @Test
-    public void saveStudent() throws Exception{
+    public void saveSubject() throws Exception{
         Subject record=new Subject(1L,"Maths");
         when(subjectReprository.save(record)).thenReturn(record);
         assertThat(subjectService.createSubjetService(record).getId()).isEqualTo(1);
     }
 
     @Test
-    public void deleteBook() throws ResourceNotFoundException {
+    public void deleteSubject() throws ResourceNotFoundException {
         subjectService.deleteSubjectService(anyLong());
         verify(subjectReprository,times(1)).deleteById(anyLong());
     }
@@ -92,7 +92,7 @@ public class SubjectServiceTest {
 
     }
     @Test
-    public void getDepartmentByIdNotFoundException(){
+    public void getSubjectByIdNotFoundException(){
         assertThatExceptionOfType(ResourceNotFoundException.class)
                 .isThrownBy(() -> subjectService.getSubjectById(1L))
                 .withMessage("Subject not found for this id :: 1");

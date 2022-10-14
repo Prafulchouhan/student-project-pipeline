@@ -42,7 +42,7 @@ public class TeacherServiceTest {
     }
 
     @Test
-    public void getAllStudent(){
+    public void getAllTeacher(){
         Mockito.when(teacherReprository.findAll()).thenReturn(Arrays.asList(t1,t2,t3));
         System.out.println(teacherService.getTeachersService());
         assertThat(teacherService.getTeachersService().size()).isEqualTo(3);
@@ -50,14 +50,14 @@ public class TeacherServiceTest {
 
 
     @Test
-    public void getAllSubject() throws ResourceNotFoundException {
+    public void getTeacherByid() throws ResourceNotFoundException {
         long id = 1L;
         Mockito.when(teacherReprository.findById(id)).thenReturn(Optional.ofNullable(t1));
         assertThat(teacherService.getTeacherById(t1.getId()).getId()).isEqualTo(1L);
     }
 
     @Test
-    public void saveStudent() throws Exception{
+    public void saveTeacher() throws Exception{
         Teacher record=new Teacher(1L,"Adi");
         Mockito.when(teacherReprository.save(record)).thenReturn(record);
         assertThat(teacherService.createTeacherService(record).getId()).isEqualTo(1);

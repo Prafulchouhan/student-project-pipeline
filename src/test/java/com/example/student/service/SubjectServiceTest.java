@@ -92,7 +92,7 @@ public class SubjectServiceTest {
 
     }
     @Test
-    public void getDepartmentById_throwsException(){
+    public void getDepartmentByIdNotFoundException(){
         assertThatExceptionOfType(ResourceNotFoundException.class)
                 .isThrownBy(() -> subjectService.getSubjectById(1L))
                 .withMessage("Subject not found for this id :: 1");

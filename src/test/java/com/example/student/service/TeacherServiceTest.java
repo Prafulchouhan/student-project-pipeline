@@ -70,7 +70,7 @@ public class TeacherServiceTest {
     }
 
     @Test
-    public void getDepartmentById_throwsException(){
+    public void getTeacherByIdNotfoundException(){
         assertThatExceptionOfType(ResourceNotFoundException.class)
                 .isThrownBy(() -> teacherService.getTeacherById(1L))
                 .withMessage("Teacher not found for this id :: 1");

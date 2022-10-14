@@ -105,7 +105,7 @@ public class studentServiceTest {
 //    }
 
     @Test
-    public void getDepartmentById_throwsException(){
+    public void getDepartmentByIdNotFoundException(){
         assertThatExceptionOfType(ResourceNotFoundException.class)
                 .isThrownBy(() -> studentService.getStudentById(1L))
                 .withMessage("Student not found for this id :: 1");

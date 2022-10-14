@@ -1,10 +1,6 @@
 package com.example.student.controller;
 
-import com.example.student.model.Student;
-import com.example.student.model.Subject;
 import com.example.student.model.Teacher;
-import com.example.student.service.StudentService;
-import com.example.student.service.SubjectService;
 import com.example.student.service.TeacherService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -56,7 +52,7 @@ public class TeacherControllerTest {
     }
 
     @Test
-    public void getAllSubject() throws Exception {
+    public void getAllTeacher() throws Exception {
         List<Teacher> teachers = new ArrayList<>(Arrays.asList(t1,t2,t3));
         Mockito.when(teacherService.getTeachersService()).thenReturn(teachers);
         mockMvc.perform(MockMvcRequestBuilders
@@ -69,7 +65,7 @@ public class TeacherControllerTest {
     }
 
     @Test
-    public void getSubjectById() throws Exception {
+    public void getTeachertById() throws Exception {
         Mockito.when(teacherService.getTeacherById(t1.getId())).thenReturn(t1);
 
         mockMvc.perform(MockMvcRequestBuilders

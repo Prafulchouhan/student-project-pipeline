@@ -2,6 +2,7 @@ package com.example.student.controller;
 
 import com.example.student.model.Student;
 import com.example.student.model.Subject;
+import com.example.student.model.Teacher;
 import com.example.student.service.StudentService;
 import com.example.student.service.SubjectService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,19 +45,19 @@ public class SubjectControllerTest {
     @InjectMocks
     private SubjectController subjectController;
 
-    Subject s1=new Subject(1L,"Maths");
-    Subject s2=new Subject(2L,"Maths");
-    Subject s3=new Subject(3L,"Maths");
+    Subject s1 = new Subject(1L, "Maths");
+    Subject s2 = new Subject(2L, "Maths");
+    Subject s3 = new Subject(3L, "Maths");
 
     @Before
-    public void setUp(){
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
         this.mockMvc = MockMvcBuilders.standaloneSetup(subjectController).build();
     }
 
     @Test
     public void getAllSubject() throws Exception {
-        List<Subject> std = new ArrayList<>(Arrays.asList(s1,s2,s3));
+        List<Subject> std = new ArrayList<>(Arrays.asList(s1, s2, s3));
         Mockito.when(subjectService.getSubjectService()).thenReturn(std);
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/api/v1/subject")
@@ -79,34 +80,78 @@ public class SubjectControllerTest {
                 .andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$.name", is("Maths")));
     }
+
     @Test
     public void createSubject() throws Exception {
         Mockito.when(subjectService.createSubjetService(s1)).thenReturn(s1);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/v1/subject")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .post("/api/v1/subject")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$",notNullValue()))
+                .andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$.name", is("Maths"))
-        );
+                );
     }
 
-//    @Test
-//    public void saveStudent() throws Exception {
-//        Student record = new Student(3L,"praful","praful@gmail.com", LocalDate.of(2002, Month.JANUARY,01));
-//        Mockito.when(studentService.saveStudent(record)).thenReturn(record);
-//        String content = objectWriter.writeValueAsString(record);
-//        MockHttpServletRequestBuilder mockHttpServletRequestBuilder = MockMvcRequestBuilders.post("/api/v1/students")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .content(content);
-//        mockMvc.perform(mockHttpServletRequestBuilder)
-//                .andDo(print())
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$", notNullValue()))
-//                .andExpect(jsonPath("$.name", is("praful")));
-//
-//    }
+    @Test
+    public void saveSUbject() throws Exception {
+        Mockito.when(subjectService.createSubjetService(s1)).thenReturn(s1);
+        String content = objectWriter.writeValueAsString(s1);
+        MockHttpServletRequestBuilder mockHttpServletRequestBuilder = MockMvcRequestBuilders.post("/api/v1/subject")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content);
+        mockMvc.perform(mockHttpServletRequestBuilder)
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$", notNullValue()));
+
+    }
+
+    @Test
+    public void deleteSubject() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/api/v1/subject/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void postSubject() throws Exception {
+
+//        Mockito.when(teacherService.createTeacherService(t1)).thenReturn(t1);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/v1/subject")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(new Teacher(1L, "math")))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isCreated());
+    }
+
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    public void saveTeacher() throws Exception {
+        Mockito.when(subjectService.createSubjetService(s1)).thenReturn(s1);
+        String content = objectWriter.writeValueAsString(s1);
+        MockHttpServletRequestBuilder mockHttpServletRequestBuilder = MockMvcRequestBuilders.post("/api/v1/subject")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content);
+        mockMvc.perform(mockHttpServletRequestBuilder)
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+    }
 }

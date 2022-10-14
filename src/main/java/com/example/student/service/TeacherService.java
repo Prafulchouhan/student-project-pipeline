@@ -25,7 +25,7 @@ public class TeacherService {
     public Teacher getTeacherById(Long id)throws ResourceNotFoundException {
         return teacherReprository.findById(id)
                 .orElseThrow(()->
-                        new ResourceNotFoundException("Student not found for this id :: " + id));
+                        new ResourceNotFoundException("Teacher not found for this id :: " + id));
     }
     public Teacher createTeacherService(Teacher teacher) {
         return this.teacherReprository.save(teacher);

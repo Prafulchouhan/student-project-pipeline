@@ -14,6 +14,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 
@@ -101,6 +103,14 @@ public class studentServiceTest {
 //        Mockito.when(studentReprository.delete(s1)).thenReturn(Optional.ofNullable(s1));
 //        assertThat(studentService.getStudentById(id).getName()).isEqualTo("praful");
 //    }
+
+    @Test
+    public void getDepartmentById_throwsException(){
+        assertThatExceptionOfType(ResourceNotFoundException.class)
+                .isThrownBy(() -> studentService.getStudentById(1L))
+                .withMessage("Student not found for this id :: 1");
+    }
+
 }
 
 

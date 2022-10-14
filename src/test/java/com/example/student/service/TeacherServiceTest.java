@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -66,6 +67,13 @@ public class TeacherServiceTest {
     public void deleteTeacher() throws ResourceNotFoundException {
         teacherService.deleteTeacherService(anyLong());
         verify(teacherReprository,times(1)).deleteById(anyLong());
+    }
+
+    @Test
+    public void getDepartmentById_throwsException(){
+        assertThatExceptionOfType(ResourceNotFoundException.class)
+                .isThrownBy(() -> teacherService.getTeacherById(1L))
+                .withMessage("Teacher not found for this id :: 1");
     }
 }
 

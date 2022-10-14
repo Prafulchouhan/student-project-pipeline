@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -89,6 +90,12 @@ public class SubjectServiceTest {
         assertThat(subjectService.assignTeacherToSubjectService(1L,1L)).isNotNull().isEqualTo(s1);
         verify(subjectReprository, times(1)).save(any(Subject.class));
 
+    }
+    @Test
+    public void getDepartmentById_throwsException(){
+        assertThatExceptionOfType(ResourceNotFoundException.class)
+                .isThrownBy(() -> subjectService.getSubjectById(1L))
+                .withMessage("Subject not found for this id :: 1");
     }
 }
 

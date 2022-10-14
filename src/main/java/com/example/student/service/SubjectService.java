@@ -29,7 +29,7 @@ public class SubjectService {
     public Subject getSubjectById(Long id)throws ResourceNotFoundException {
         return subjectReprository.findById(id)
                 .orElseThrow(()->
-                        new ResourceNotFoundException("Student not found for this id :: " + id));
+                        new ResourceNotFoundException("Subject not found for this id :: " + id));
     }
 
     public Subject createSubjetService(Subject subject) {

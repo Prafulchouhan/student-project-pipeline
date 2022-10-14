@@ -2,6 +2,7 @@ package com.example.student.controller;
 
 
 import com.example.student.exception.ResourceNotFoundException;
+import com.example.student.model.Subject;
 import com.example.student.model.Teacher;
 import com.example.student.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,16 @@ public class TeacherController {
         return teacherService.createTeacherService(teacher);
     }
 
+    @GetMapping("/{id}")
+    public Teacher getTeacherById(@PathVariable Long id) throws ResourceNotFoundException {
+        return teacherService.getTeacherById(id);
+    }
+
     @DeleteMapping("/{id}")
-    public List<Teacher> deleteTeacher(
+    public void deleteTeacher(
             @PathVariable Long id
     ) throws ResourceNotFoundException {
-        return teacherService.deleteTeacherService(id);
+        teacherService.deleteTeacherService(id);
     }
 
 }

@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.HashSet;
+import java.util.OptionalDouble;
 import java.util.Set;
 
 @Entity
@@ -54,6 +55,14 @@ public class Student {
         this.name = name;
         this.email = email;
         this.dob = dob;
+    }
+
+    public Student(Long id, String name, String email, LocalDate dob, Integer age) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.dob = dob;
+        this.age = age;
     }
 
     public Long getId() {
@@ -117,7 +126,8 @@ public class Student {
         return subjects;
     }
 
-    public void addSub(Subject subject) {
+    public boolean addSub(Subject subject) {
         subjects.add(subject);
+        return true;
     }
 }

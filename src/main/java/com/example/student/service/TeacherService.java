@@ -27,18 +27,11 @@ public class TeacherService {
                 .orElseThrow(()->
                         new ResourceNotFoundException("Student not found for this id :: " + id));
     }
-
-    public void deleteTeacher(Teacher teacher){
-        teacherReprository.delete(teacher);
-    }
-
     public Teacher createTeacherService(Teacher teacher) {
         return this.teacherReprository.save(teacher);
     }
 
-    public List<Teacher> deleteTeacherService(Long id) throws ResourceNotFoundException {
-        Teacher teacher=getTeacherById(id);
-        deleteTeacher(teacher);
-        return getTeachersService();
+    public void deleteTeacherService(Long id) {
+        teacherReprository.deleteById(id);
     }
 }

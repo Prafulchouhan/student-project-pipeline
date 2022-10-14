@@ -5,6 +5,7 @@ import com.example.student.exception.ResourceNotFoundException;
 import com.example.student.model.Subject;
 import com.example.student.reprository.StudentReprository;
 import com.example.student.model.Student;
+import com.example.student.reprository.SubjectReprository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +14,14 @@ import java.util.List;
 @Service
 public class StudentService {
     private final StudentReprository studentReprository;
+
+    private final SubjectReprository subjectReprository;
     private final SubjectService subjectService;
 
     @Autowired
-    public StudentService(StudentReprository studentReprository, SubjectService subjectService) {
+    public StudentService(StudentReprository studentReprository, SubjectReprository subjectReprository, SubjectService subjectService) {
         this.studentReprository = studentReprository;
+        this.subjectReprository = subjectReprository;
         this.subjectService = subjectService;
     }
 
@@ -30,9 +34,7 @@ public class StudentService {
         return studentReprository.save(student);
     }
 
-    public void deleteStudent(Student student){
-        studentReprository.delete(student);
-    }
+
 
     public Student getStudentById(Long id)throws ResourceNotFoundException {
         return studentReprository.findById(id)
@@ -41,17 +43,15 @@ public class StudentService {
     }
 
     public Student addSubjectToStudentService(Long studentId,Long subjectId) throws ResourceNotFoundException {
-        Subject subject= subjectService.getSubjectById(subjectId);
-        Student student=getStudentById(studentId);
+        Subject subject= subjectReprository.findById(subjectId).get();
+        Student student=studentReprository.findById(studentId).get();
         student.addSub(subject);
         return saveStudent(student);
     }
 
 
-    public List<Student> deleteStudentService(Long id) throws ResourceNotFoundException {
-        Student student=getStudentById(id);
-        deleteStudent(student);
-        return getStudents();
+    public void deleteStudentService(Long id) throws ResourceNotFoundException {
+            studentReprository.deleteById(id);
     }
 
     public Student updateStudentService(Long id, Student std) throws ResourceNotFoundException {

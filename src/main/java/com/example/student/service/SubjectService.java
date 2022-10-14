@@ -36,21 +36,15 @@ public class SubjectService {
         return this.subjectReprository.save(subject);
     }
 
-    public void deleteSubject(Subject subject){
-        subjectReprository.delete(subject);
-    }
-
 
     public Subject assignTeacherToSubjectService(Long subjectId, Long teacherId) throws ResourceNotFoundException {
-        Subject subject=getSubjectById(subjectId);
+        Subject subject=subjectReprository.findById(subjectId).get();
         Teacher teacher=teacherReprository.findById(teacherId).get();
-        subject.assignTeacher(teacher);
-        return createSubjetService(subject);
+        subject.setTeacher(teacher);
+        return subjectReprository.save(subject);
     }
 
-    public List<Subject> deleteSubjectService(Long id) throws ResourceNotFoundException {
-        Subject subject=getSubjectById(id);
-        deleteSubject(subject);
-        return getSubjectService();
+    public void deleteSubjectService(Long id) {
+        subjectReprository.deleteById(id);
     }
 }

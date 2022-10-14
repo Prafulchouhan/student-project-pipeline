@@ -21,6 +21,11 @@ public class Subject {
     @ManyToMany(mappedBy = "subjects")
     Set<Student> enrolledStudents = new HashSet<>();
 
+    public Subject(long id, String name) {
+        this.id=id;
+        this.name=name;
+    }
+
 
     public Long getId() {
         return id;

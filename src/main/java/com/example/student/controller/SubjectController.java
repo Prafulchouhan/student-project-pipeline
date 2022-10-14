@@ -23,6 +23,12 @@ public class SubjectController {
         return subjectService.getSubjectService();
     }
 
+
+    @GetMapping("/{id}")
+    public Subject getSubjectById(@PathVariable Long id) throws ResourceNotFoundException {
+        return subjectService.getSubjectById(id);
+    }
+
     @PostMapping
     public Subject createSubjet(@RequestBody Subject subject){
 
@@ -39,10 +45,10 @@ public class SubjectController {
 
 
     @DeleteMapping("/{id}")
-    public List<Subject> deleteSubject(
+    public void deleteSubject(
             @PathVariable Long id
     ) throws ResourceNotFoundException {
-        return subjectService.deleteSubjectService(id);
+        subjectService.deleteSubjectService(id);
     }
 
 }

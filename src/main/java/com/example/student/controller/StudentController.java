@@ -50,10 +50,10 @@ public class StudentController {
 
     //delete student
     @DeleteMapping("/{id}")
-    public List<Student> deleteStudent(
+    public void deleteStudent(
             @PathVariable Long id
     ) throws ResourceNotFoundException {
-        return studentService.deleteStudentService(id);
+         studentService.deleteStudentService(id);
     }
 
     //update student by patch

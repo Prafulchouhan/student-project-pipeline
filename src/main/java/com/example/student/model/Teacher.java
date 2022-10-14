@@ -17,6 +17,15 @@ public class Teacher {
     @OneToMany(mappedBy = "teacher")
     private Set<Subject> subjects=new HashSet<>();
 
+    public Teacher(long id, String name) {
+        this.name=name;
+        this.id=id;
+    }
+
+    public Teacher() {
+        super();
+    }
+
 
     public Long getId() {
         return id;

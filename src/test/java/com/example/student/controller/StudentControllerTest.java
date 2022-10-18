@@ -2,7 +2,6 @@ package com.example.student.controller;
 
 import com.example.student.model.Student;
 import com.example.student.model.Subject;
-import com.example.student.model.Teacher;
 import com.example.student.service.StudentService;
 import com.example.student.service.SubjectService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -131,6 +130,7 @@ public class StudentControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andDo(print())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$.name", is(s1.getName())))
                 .andReturn().getResponse().getContentAsString();

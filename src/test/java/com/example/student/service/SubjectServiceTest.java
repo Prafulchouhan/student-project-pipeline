@@ -65,7 +65,7 @@ public class SubjectServiceTest {
     public void getSubjectByid() throws ResourceNotFoundException {
         long id = 1L;
         when(subjectReprository.findById(s1.getId())).thenReturn(Optional.ofNullable(s1));
-        assertThat(subjectService.getSubjectById(s1.getId()).getName()).isEqualTo("Maths");
+        assertThat(subjectService.getSubjectById(s1.getId()).getName()).isEqualTo("math");
     }
 
     @Test

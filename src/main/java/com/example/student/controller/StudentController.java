@@ -38,8 +38,8 @@ public class StudentController {
 
 
     @PostMapping()
-    public Student registerNewStudent(@RequestBody Student student){
-        return studentService.saveStudent(student);
+    public ResponseEntity<Student> registerNewStudent(@RequestBody Student student){
+        return new ResponseEntity<>(studentService.saveStudent(student),HttpStatus.CREATED);
     }
 
     //manytomany

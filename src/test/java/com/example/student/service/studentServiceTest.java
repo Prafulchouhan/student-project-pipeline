@@ -23,10 +23,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
@@ -39,7 +36,7 @@ public class studentServiceTest {
     private MockMvc mockMvc;
 
     Student s1=Student.builder().id(1L).name("praful").dob(LocalDate.of(2002,Month.JANUARY,01))
-            .email("praful@gmal.com").build();
+            .email("praful@gmal.com").subjects(new HashSet<>()).build();
 
     Student s2=Student.builder().id(2L).name("praful").dob(LocalDate.of(2002,Month.JANUARY,01))
             .email("praful@gmal.com").build();
@@ -105,7 +102,7 @@ public class studentServiceTest {
     public void addSubjectToStudentService() throws ResourceNotFoundException {
         when(subjectReprository.findById(anyLong())).thenReturn(Optional.ofNullable(sub));
         when(studentReprository.findById(anyLong())).thenReturn(Optional.ofNullable(s1));
-        when(studentReprository.save(any(Student.class))).thenReturn(s1);
+        when(studentReprository.save(s1)).thenReturn(s1);
 
         assertThat(studentService.addSubjectToStudentService(1L,1L)).isNotNull();
         verify(studentReprository, times(1)).save(s1);

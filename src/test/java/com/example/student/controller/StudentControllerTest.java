@@ -2,6 +2,7 @@ package com.example.student.controller;
 
 import com.example.student.model.Student;
 import com.example.student.model.Subject;
+import com.example.student.model.Teacher;
 import com.example.student.service.StudentService;
 import com.example.student.service.SubjectService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,9 +53,7 @@ public class StudentControllerTest {
     Student s1 = Student.builder().id(1L).name("praful")
             .email("praful@gmal.com").build();
 
-    Subject sub=new Subject(1L,"math");
-
-    LocalDate l1=LocalDate.of(2002,Month.JANUARY,01);
+    Subject sub= Subject.builder().id(1L).name("maths").build();
 
     Student s2 = Student.builder().id(2L).name("praful").dob(LocalDate.of(2002,Month.JANUARY,01))
             .email("praful@gmal.com").build();
@@ -78,7 +77,7 @@ public class StudentControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
 //                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].name", is("praful")));
     }
 

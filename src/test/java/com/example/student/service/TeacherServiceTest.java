@@ -1,6 +1,7 @@
 package com.example.student.service;
 
 import com.example.student.exception.ResourceNotFoundException;
+import com.example.student.model.Subject;
 import com.example.student.model.Teacher;
 import com.example.student.reprository.TeacherReprository;
 import org.junit.Before;
@@ -26,9 +27,9 @@ public class TeacherServiceTest {
 
     private MockMvc mockMvc;
 
-    Teacher t1=new Teacher(1L,"abhi");
-    Teacher t2=new Teacher(1L,"abhi");
-    Teacher t3=new Teacher(1L,"abhi");
+    Teacher t1= Teacher.builder().id(1L).name("Abhi").build();
+    Teacher t2= Teacher.builder().id(2L).name("Abhi").build();
+    Teacher t3= Teacher.builder().id(3L).name("Abhi").build();
     @Mock
     private TeacherReprository teacherReprository;
 
@@ -58,7 +59,7 @@ public class TeacherServiceTest {
 
     @Test
     public void saveTeacher() throws Exception{
-        Teacher record=new Teacher(1L,"Adi");
+        Teacher record= Teacher.builder().id(1L).name("Abhi").build();
         Mockito.when(teacherReprository.save(record)).thenReturn(record);
         assertThat(teacherService.createTeacherService(record).getId()).isEqualTo(1);
     }

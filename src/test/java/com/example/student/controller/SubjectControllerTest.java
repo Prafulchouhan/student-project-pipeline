@@ -10,22 +10,25 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import static org.mockito.Mockito.*;
+
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@RunWith(MockitoJUnitRunner.class)
 public class SubjectControllerTest {
 
     private MockMvc mockMvc;
@@ -38,9 +41,9 @@ public class SubjectControllerTest {
     @InjectMocks
     private SubjectController subjectController;
 
-    Subject s1 = new Subject(1L, "Maths");
-    Subject s2 = new Subject(2L, "Maths");
-    Subject s3 = new Subject(3L, "Maths");
+    Subject s1 = Subject.builder().id(1L).name("Maths").build();
+    Subject s2 = Subject.builder().id(2L).name("Maths").build();
+    Subject s3 = Subject.builder().id(3L).name("Maths").build();
 
     @Before
     public void setUp() {
@@ -74,18 +77,6 @@ public class SubjectControllerTest {
                 .andExpect(jsonPath("$.name", is("Maths")));
     }
 
-//    @Test
-//    public void createSubject() throws Exception {
-//        when(subjectService.createSubjetService(s1)).thenReturn(s1);
-//        mockMvc.perform(MockMvcRequestBuilders
-//                        .post("/api/v1/subject")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(asJsonString(new Subject(1L,"praful")))
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isCreated());
-//    }
-
     @Test
     public void deleteSubject() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders
@@ -102,17 +93,34 @@ public class SubjectControllerTest {
         }
     }
 
-//    @Test
-//    public void saveTeacher() throws Exception {
-//        Mockito.when(subjectService.createSubjetService(s1)).thenReturn(s1);
-//        String content = objectWriter.writeValueAsString(s1);
-//        MockHttpServletRequestBuilder mockHttpServletRequestBuilder = MockMvcRequestBuilders.post("/api/v1/subject")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .content(content);
-//        mockMvc.perform(mockHttpServletRequestBuilder)
-//                .andDo(print())
-//                .andExpect(status().isCreated());
-//
-//    }
+    @Test
+    public void saveSubject() throws Exception {
+        doReturn(s1).when(subjectService).createSubjetService(any());
+        String content = new ObjectMapper().writeValueAsString(s1);
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/v1/subject")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(content))
+                .andDo(print())
+                .andExpect(jsonPath("$", notNullValue()))
+                .andExpect(jsonPath("$.name", is(s1.getName())))
+                .andReturn().getResponse().getContentAsString();
+
+    }
+
+    @Test
+    public void assignTeacher() throws Exception {
+        when(subjectService.assignTeacherToSubjectService(1L,1L)).thenReturn(s2);
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.put("/api/v1/subject/1/teacher/1")
+                .characterEncoding(Charset.defaultCharset())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$",notNullValue()))
+                .andExpect(jsonPath("$.name",is(s2.getName())));
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.student.controller;
 
+import com.example.student.model.Subject;
 import com.example.student.model.Teacher;
 import com.example.student.service.TeacherService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 import static org.springframework.mock.http.server.reactive.MockServerHttpRequest.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -41,9 +44,9 @@ public class TeacherControllerTest {
     @InjectMocks
     private TeacherController teacherController;
 
-    Teacher t1=new Teacher(1L,"abhi");
-    Teacher t2=new Teacher(1L,"abhi");
-    Teacher t3=new Teacher(1L,"abhi");
+    Teacher t1= Teacher.builder().id(1L).name("Adi").build();
+    Teacher t2=Teacher.builder().id(1L).name("Adi").build();
+    Teacher t3=Teacher.builder().id(1L).name("Adi").build();
 
     @Before
     public void setUp(){
@@ -61,7 +64,7 @@ public class TeacherControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[2].name", is("abhi")));
+                .andExpect(jsonPath("$[2].name", is("Adi")));
     }
 
     @Test
@@ -74,7 +77,7 @@ public class TeacherControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.name", is("abhi")));
+                .andExpect(jsonPath("$.name", is("Adi")));
     }
 
     @Test
@@ -97,21 +100,6 @@ public class TeacherControllerTest {
                 .andDo(print())
             .andExpect(status().isOk());
     }
-    @Test
-    public void postTeacher() throws Exception {
-
-//        Mockito.when(teacherService.createTeacherService(t1)).thenReturn(t1);
-
-        mockMvc.perform( MockMvcRequestBuilders
-                        .post("/api/v1/teacher")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(new Teacher(1L,"abhi")))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").exists());
-    }
-
     public static String asJsonString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);
@@ -122,16 +110,16 @@ public class TeacherControllerTest {
 
     @Test
     public void saveTeacher() throws Exception {
-        Mockito.when(teacherService.createTeacherService(t1)).thenReturn(t1);
-        String content = objectWriter.writeValueAsString(t1);
-        MockHttpServletRequestBuilder mockHttpServletRequestBuilder = MockMvcRequestBuilders.post("/api/v1/teacher")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(content);
-        mockMvc.perform(mockHttpServletRequestBuilder)
+        doReturn(t1).when(teacherService).createTeacherService(any());
+        String content = new ObjectMapper().writeValueAsString(t1);
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/v1/teacher")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(content))
                 .andDo(print())
-                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.id", is(1L)));
+                .andExpect(jsonPath("$.name", is(t1.getName())))
+                .andReturn().getResponse().getContentAsString();
     }
 }

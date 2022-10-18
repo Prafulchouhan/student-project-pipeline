@@ -1,11 +1,17 @@
 package com.example.student.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@NoArgsConstructor
+@Setter
+@Getter
+@Builder
+@AllArgsConstructor
 @Entity
 public class Teacher {
     @Id
@@ -16,34 +22,4 @@ public class Teacher {
     @JsonIgnore
     @OneToMany(mappedBy = "teacher")
     private Set<Subject> subjects=new HashSet<>();
-
-    public Teacher(long id, String name) {
-        this.name=name;
-        this.id=id;
-    }
-
-    public Teacher() {
-        super();
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<Subject> getSubjects() {
-        return subjects;
-    }
-
-    public void setSubjects(Set<Subject> subjects) {
-        this.subjects = subjects;
-    }
 }

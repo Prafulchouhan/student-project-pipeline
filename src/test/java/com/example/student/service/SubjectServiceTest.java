@@ -34,11 +34,11 @@ public class SubjectServiceTest {
 
     private MockMvc mockMvc;
 
-    Subject s1=new Subject(3L,"Maths");
-    Subject s2=new Subject(1L,"Maths");
-    Subject s3=new Subject(2L,"Maths");
+    Subject s1=Subject.builder().id(1L).name("math").build();
+    Subject s2=Subject.builder().id(2L).name("math").build();
+    Subject s3=Subject.builder().id(3L).name("math").build();
 
-    Teacher t1=new Teacher(1L,"ram");
+    Teacher t1=Teacher.builder().id(1L).name("Adi").build();
     @Mock
     private SubjectReprository subjectReprository;
     @Mock
@@ -70,7 +70,7 @@ public class SubjectServiceTest {
 
     @Test
     public void saveSubject() throws Exception{
-        Subject record=new Subject(1L,"Maths");
+        Subject record=Subject.builder().id(1L).name("math").build();
         when(subjectReprository.save(record)).thenReturn(record);
         assertThat(subjectService.createSubjetService(record).getId()).isEqualTo(1);
     }

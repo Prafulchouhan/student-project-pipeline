@@ -11,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.ReflectionUtils;
@@ -48,7 +47,7 @@ public class studentServiceTest {
     Student s3=Student.builder().id(3L).name("praful").dob(LocalDate.of(2002,Month.JANUARY,01))
             .email("praful@gmal.com").build();
 
-    Subject sub=new Subject(1L,"Maths");
+    Subject sub= Subject.builder().id(1L).name("math").build();
     @Mock
     private StudentReprository studentReprository;
 

@@ -1,10 +1,17 @@
 package com.example.student.model;
 
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@NoArgsConstructor
+@Setter
+@Getter
+@Builder
+@AllArgsConstructor
 @Entity
 public class Subject {
 
@@ -20,38 +27,4 @@ public class Subject {
 
     @ManyToMany(mappedBy = "subjects")
     Set<Student> enrolledStudents = new HashSet<>();
-
-    public Subject(long id, String name) {
-        this.id=id;
-        this.name=name;
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setEnrolledStudent(Set<Student> enrolledStudent) {
-        this.enrolledStudents = enrolledStudent;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
-
-    public void assignTeacher(Teacher teacher) {
-        this.teacher=teacher;
-    }
 }

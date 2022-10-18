@@ -5,10 +5,13 @@ import com.example.student.exception.ResourceNotFoundException;
 import com.example.student.model.Student;
 import com.example.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/api/v1/students")
@@ -58,10 +61,10 @@ public class StudentController {
 
     //update student by patch
     @PatchMapping("/{id}")
-    public Student updateStudent(
+    public ResponseEntity<Student> updateStudent(
             @PathVariable Long id,
-            @RequestBody Student std
+            @RequestBody Map<Object,Object> fields
     ) throws ResourceNotFoundException {
-          return studentService.updateStudentService(id,std);
+          return new ResponseEntity<>(studentService.updateStudentService(id,fields), HttpStatus.OK);
     }
 }

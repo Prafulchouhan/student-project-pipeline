@@ -1,0 +1,19 @@
+version: '3.1'
+services:
+  web:
+    container_name: Student_project
+    image: student-project
+    build: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgresql
+  postgresql:
+    container_name: sample_postgres
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=Praful@565
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=student
+    ports:
+      - "5433:5433"

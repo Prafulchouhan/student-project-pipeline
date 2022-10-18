@@ -7,9 +7,13 @@ import com.example.student.reprository.StudentReprository;
 import com.example.student.model.Student;
 import com.example.student.reprository.SubjectReprository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
+
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class StudentService {
@@ -44,9 +48,9 @@ public class StudentService {
 
     public Student addSubjectToStudentService(Long studentId,Long subjectId) throws ResourceNotFoundException {
         Subject subject= subjectReprository.findById(subjectId).get();
-        Student student=studentReprository.findById(studentId).get();
+        Student student= studentReprository.findById(studentId).get();
         student.addSub(subject);
-        return saveStudent(student);
+        return studentReprository.save(student);
     }
 
 
@@ -54,11 +58,15 @@ public class StudentService {
             studentReprository.deleteById(id);
     }
 
-    public Student updateStudentService(Long id, Student std) throws ResourceNotFoundException {
-        Student student=getStudentById(id);
-        student.setName(std.getName());
-        student.setDob(std.getDob());
-        student.setEmail(std.getEmail());
-        return saveStudent(student);
+    public Student updateStudentService(Long id, Map<Object, Object> fields) throws ResourceNotFoundException {
+        Student student=studentReprository.findById(id).get();
+
+        fields.forEach((k,v) ->{
+            Field field=ReflectionUtils.findField(Student.class,String.valueOf(k));
+            field.setAccessible(true);
+            ReflectionUtils.setField(field, student, v);
+        });
+        return studentReprository.save(student);
+
     }
 }

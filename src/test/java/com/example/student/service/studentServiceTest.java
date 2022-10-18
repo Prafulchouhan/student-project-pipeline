@@ -14,15 +14,19 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.ReflectionUtils;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -35,11 +39,14 @@ public class studentServiceTest {
 
     private MockMvc mockMvc;
 
-    Student s1=new Student(1L,"praful","praful@gmail.com", LocalDate.of(2002, Month.JANUARY,01));
+    Student s1=Student.builder().id(1L).name("praful").dob(LocalDate.of(2002,Month.JANUARY,01))
+            .email("praful@gmal.com").build();
 
-    Student s2=new Student(2L,"praful","praful@gmail.com", LocalDate.of(2002, Month.JANUARY,01));
+    Student s2=Student.builder().id(2L).name("praful").dob(LocalDate.of(2002,Month.JANUARY,01))
+            .email("praful@gmal.com").build();
 
-    Student s3=new Student(3L,"praful","praful@gmail.com", LocalDate.of(2002, Month.JANUARY,01));
+    Student s3=Student.builder().id(3L).name("praful").dob(LocalDate.of(2002,Month.JANUARY,01))
+            .email("praful@gmal.com").build();
 
     Subject sub=new Subject(1L,"Maths");
     @Mock
@@ -72,15 +79,23 @@ public class studentServiceTest {
 
     @Test
     public void saveStudent() throws Exception{
-        Student record = new Student(1L,"praful","praful@gmail.com", LocalDate.of(2002, Month.JANUARY,01));
+        Student record = Student.builder().id(1L).name("praful").dob(LocalDate.of(2002,Month.JANUARY,01))
+                .email("praful@gmal.com").build();
         Mockito.when(studentReprository.save(record)).thenReturn(record);
         assertThat(studentService.saveStudent(record).getName()).isEqualTo("praful");
     }
     @Test
     public void updateStudent() throws ResourceNotFoundException {
+//        Map<>
         Mockito.when(studentReprository.findById(anyLong())).thenReturn(Optional.ofNullable(s1));
         Mockito.when(studentReprository.save(any(Student.class))).thenReturn(s1);
-        assertThat(studentService.updateStudentService(anyLong(),s1)).isNotNull();
+        Map<Object, Object> fields = new HashMap<>();
+        fields.forEach((k,v) ->{
+            Field field= ReflectionUtils.findField(Student.class,String.valueOf(k));
+            field.setAccessible(true);
+            ReflectionUtils.setField(field, s1, v);
+        });
+        assertThat(studentService.updateStudentService(1L,new HashMap<>())).isNotNull();
     }
     @Test
     public void deleteStudent() throws ResourceNotFoundException {
@@ -93,8 +108,8 @@ public class studentServiceTest {
         when(studentReprository.findById(anyLong())).thenReturn(Optional.ofNullable(s1));
         when(studentReprository.save(any(Student.class))).thenReturn(s1);
 
-        assertThat(studentService.addSubjectToStudentService(anyLong(),anyLong())).isNotNull();
-        verify(studentReprository, times(2)).save(any(Student.class));
+        assertThat(studentService.addSubjectToStudentService(1L,1L)).isNotNull();
+        verify(studentReprository, times(1)).save(s1);
     }
 
 //    @Test

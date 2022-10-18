@@ -3,11 +3,17 @@ package com.example.student.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.HashSet;
-import java.util.OptionalDouble;
 import java.util.Set;
+import lombok.*;
 
+
+
+@NoArgsConstructor
+@Setter
+@Getter
+@Builder
+@AllArgsConstructor
 @Entity
 @Table
 public class Student {
@@ -25,6 +31,9 @@ public class Student {
     private String name;
     private String email;
     private LocalDate dob;
+
+
+
     @Transient
     private Integer age;
 
@@ -36,79 +45,6 @@ public class Student {
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
     private Set<Subject> subjects = new HashSet<>();
-
-
-    public Student() {
-        super();
-    }
-
-    public Student(String name, String email, LocalDate dob) {
-        super();
-        this.name = name;
-        this.email = email;
-        this.dob = dob;
-    }
-
-    public Student(Long id, String name, String email, LocalDate dob) {
-        super();
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.dob = dob;
-    }
-
-    public Student(Long id, String name, String email, LocalDate dob, Integer age) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.dob = dob;
-        this.age = age;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public LocalDate getDob() {
-        return dob;
-    }
-
-    public void setDob(LocalDate dob) {
-        this.dob = dob;
-    }
-
-    public Integer getAge() {
-        return Period.between(this.dob,LocalDate.now()).getYears();
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public void setSubjects(Set<Subject> subjects) {
-        this.subjects = subjects;
-    }
-
     @Override
     public String toString() {
         return "Student{" +
@@ -118,12 +54,6 @@ public class Student {
                 ", dob=" + dob +
                 ", age=" + age +
                 '}';
-    }
-
-
-
-    public Set<Subject> getSubjects() {
-        return subjects;
     }
 
     public boolean addSub(Subject subject) {

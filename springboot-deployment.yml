@@ -33,4 +33,4 @@ spec:
                   name: hostname-config
                   key: postgres_host
           image: prafulchouhan/student-project
-          imagePullPolicy: "Always"
+          imagePullPolicy: "is"

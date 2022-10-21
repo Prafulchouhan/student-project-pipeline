@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: student-project
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: student-project
+  replicas: 1
+  template:
+    metadata:
+      name: student-project
+      labels:
+        app: student-project
+    spec:
+      containers:
+        - name: student-project
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: password
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: hostname-config
+                  key: postgres_host
+          image: prafulchouhan/student-project
+          imagePullPolicy: "Always"

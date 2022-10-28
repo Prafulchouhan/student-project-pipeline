@@ -5,10 +5,9 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-
-
-
 @NoArgsConstructor
 @Setter
 @Getter
@@ -39,6 +38,7 @@ public class Student {
 
 
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "subject_s",
             joinColumns = @JoinColumn(name = "student_id"),

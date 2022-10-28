@@ -1,6 +1,7 @@
 package com.example.student.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,5 +27,6 @@ public class Subject {
     private Teacher teacher;
 
     @ManyToMany(mappedBy = "subjects")
+    @JsonIgnore
     Set<Student> enrolledStudents = new HashSet<>();
 }

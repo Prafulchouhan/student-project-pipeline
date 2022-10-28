@@ -38,7 +38,6 @@ public class Student {
 
 
     @ManyToMany
-    @JsonIgnore
     @JoinTable(
             name = "subject_s",
             joinColumns = @JoinColumn(name = "student_id"),
